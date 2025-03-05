@@ -5,15 +5,17 @@ display.set_caption('Пин Понг')
 window.fill((120, 130, 240))
 game = True
 
+otschet = 0
+
 slovar = {}
 
 clock = time.Clock()
 FPS = 60
 
 class GameSprite(sprite.Sprite):
-    def __init__(self, player_image, player_speed, player_x, player_y):
+    def __init__(self, player_image, player_speed, player_width, player_height, player_x, player_y):
         super().__init__()
-        self.image = transform.scale(image.load(player_image), (65, 65))
+        self.image = transform.scale(image.load(player_image), (player_width, player_height))
         self.speed = player_speed
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -56,8 +58,8 @@ class Player2(GameSprite):
         if keys_pressed[K_DOWN] and self.rect.y < 450:
             self.rect.y += self.speed
 
-player1 = Player1('raketkaluche.png', 6, 100, 150)
-player2 = Player2('palkablue.png', 6, 500, 150)
+player1 = Player1('palkared.png', 6, 30, 85, 100, 150)
+player2 = Player2('palkablue.png', 6, 30, 85, 500, 150)
 ball = Ball('teniss_boll.png', 5, 360, 160, 150)
 
 players = sprite.Group()
@@ -75,7 +77,10 @@ while game == True:
     ball.reset()
     ball.update()
     for m in sprite.spritecollide(ball, players, False):
-        ball.speed_x *= -1
+        if otschet > 20:
+            ball.speed_x *= -1
+            otschet = 0
+    otschet += 1
     for e in event.get():
         if e.type == QUIT:
             game = False
