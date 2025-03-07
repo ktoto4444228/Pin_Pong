@@ -5,7 +5,13 @@ display.set_caption('Пин Понг')
 window.fill((120, 130, 240))
 game = True
 
-otschet = 0
+font.init()
+font1 = font.SysFont("Arial", 36)
+font2 = font.SysFont("Arial", 47)
+text_render = font1.render('Счет:' + str(0), 1, (255, 255, 255))
+text_render2 = font1.render('Счет:' + str(0), 1, (255, 255, 255))
+text_render3 = font2.render('Победил игрок за красную платформу!', 1, (255, 0, 0))
+text_render4 = font2.render('Победил игрок за синюю платформу!', 1, (0, 0, 255))
 
 slovar = {}
 
@@ -20,6 +26,7 @@ class GameSprite(sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = player_x
         self.rect.y = player_y
+        self.schet = 0
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -66,6 +73,8 @@ players = sprite.Group()
 players.add(player1)
 players.add(player2)
 
+schet = 0
+
 while game == True:
     display.update()
     window.fill((120, 130, 240))
@@ -76,11 +85,27 @@ while game == True:
     player2.update()
     ball.reset()
     ball.update()
+    window.blit(text_render, (0,0))
+    window.blit(text_render2, (600, 0))
+    if ball.rect.x > 650:
+        player1.schet += 1
+        text_render = font1.render('Счет:' + str(player1.schet), 1, (255, 255, 255))
+        ball.rect.x = 350
+        ball.rect.y = 250
+    if ball.rect.x < 0:
+        player2.schet += 1
+        text_render2 = font1.render('Счет:' + str(player2.schet), 1, (255, 255, 255))
+        ball.rect.x = 350
+        ball.rect.y = 250
     for m in sprite.spritecollide(ball, players, False):
-        if otschet > 20:
+        if schet > 20:
             ball.speed_x *= -1
-            otschet = 0
-    otschet += 1
+            schet = 0
+    schet += 1
+    if player1.schet > 4:
+        window.blit(text_render3, (0, 150))
+    if player2.schet > 4:
+        window.blit(text_render4, (0, 150))
     for e in event.get():
         if e.type == QUIT:
             game = False
