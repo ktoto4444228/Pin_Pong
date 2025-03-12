@@ -75,37 +75,55 @@ players.add(player2)
 
 schet = 0
 
+finish = True
+
+konec = 0
+
 while game == True:
     display.update()
-    window.fill((120, 130, 240))
     clock.tick(FPS)
-    player1.reset()
-    player1.update()
-    player2.reset()
-    player2.update()
-    ball.reset()
-    ball.update()
-    window.blit(text_render, (0,0))
-    window.blit(text_render2, (600, 0))
-    if ball.rect.x > 650:
-        player1.schet += 1
-        text_render = font1.render('Счет:' + str(player1.schet), 1, (255, 255, 255))
-        ball.rect.x = 350
-        ball.rect.y = 250
-    if ball.rect.x < 0:
-        player2.schet += 1
-        text_render2 = font1.render('Счет:' + str(player2.schet), 1, (255, 255, 255))
-        ball.rect.x = 350
-        ball.rect.y = 250
-    for m in sprite.spritecollide(ball, players, False):
-        if schet > 20:
-            ball.speed_x *= -1
-            schet = 0
-    schet += 1
-    if player1.schet > 4:
-        window.blit(text_render3, (0, 150))
-    if player2.schet > 4:
-        window.blit(text_render4, (0, 150))
     for e in event.get():
-        if e.type == QUIT:
-            game = False
+            if e.type == QUIT:
+                game = False
+    if finish == True:
+        window.fill((120, 130, 240))
+        player1.reset()
+        player1.update()
+        player2.reset()
+        player2.update()
+        ball.reset()
+        ball.update()
+        window.blit(text_render, (0,0))
+        window.blit(text_render2, (600, 0))
+        if ball.rect.x > 650:
+            player1.schet += 1
+            text_render = font1.render('Счет:' + str(player1.schet), 1, (255, 255, 255))
+            ball.rect.x = 350
+            ball.rect.y = 250
+        if ball.rect.x < 0:
+            player2.schet += 1
+            text_render2 = font1.render('Счет:' + str(player2.schet), 1, (255, 255, 255))
+            ball.rect.x = 350
+            ball.rect.y = 250
+        for m in sprite.spritecollide(ball, players, False):
+            if schet > 20:
+                ball.speed_x *= -1
+                schet = 0
+        schet += 1
+        if player1.schet > 4:
+            window.blit(text_render3, (0, 150))
+            player1.schet = 0
+            player2.schet = 0
+            finish = False
+        if player2.schet > 4:
+            window.blit(text_render4, (0, 150))
+            player1.schet = 0
+            player2.schet = 0
+            finish = False
+    else:
+        konec += 1
+        if konec == 100:
+            konec = 0
+            text_render = font1.render('Счет:' + str(player1.schet), 1, (255, 255, 255))
+            text_render2 = font1.render('Счет:' + str(player2.schet), 1, (255, 255, 255))
+            finish = True
