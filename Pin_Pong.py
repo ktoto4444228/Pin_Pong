@@ -10,6 +10,8 @@ font1 = font.SysFont("Arial", 36)
 font2 = font.SysFont("Arial", 47)
 text_render = font1.render('Счет:' + str(0), 1, (255, 255, 255))
 text_render2 = font1.render('Счет:' + str(0), 1, (255, 255, 255))
+text_render5 = font1.render('Общий счет:' + str(0), 1, (255, 255, 255))
+text_render6 = font1.render('Общий счет:' + str(0), 1, (255, 255, 255))
 text_render3 = font2.render('Победил игрок за красную платформу!', 1, (255, 0, 0))
 text_render4 = font2.render('Победил игрок за синюю платформу!', 1, (0, 0, 255))
 
@@ -27,6 +29,9 @@ class GameSprite(sprite.Sprite):
         self.rect.x = player_x
         self.rect.y = player_y
         self.schet = 0
+        self.obshi_schet = 0
+    def clara(self, player_image2, player_width, player_height):
+        self.image = transform.scale(image.load(player_image2), (player_width, player_height))
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -75,6 +80,8 @@ players.add(player2)
 
 schet = 0
 
+obshi_schet = 0
+
 finish = True
 
 konec = 0
@@ -95,14 +102,20 @@ while game == True:
         ball.update()
         window.blit(text_render, (0,0))
         window.blit(text_render2, (600, 0))
+        window.blit(text_render5, (0, 30))
+        window.blit(text_render6, (500, 30))
         if ball.rect.x > 650:
             player1.schet += 1
+            player1.obshi_schet += 1
             text_render = font1.render('Счет:' + str(player1.schet), 1, (255, 255, 255))
+            text_render5 = font1.render('Общий счет:' + str(player1.obshi_schet), 1, (255, 255, 255))
             ball.rect.x = 350
             ball.rect.y = 250
         if ball.rect.x < 0:
             player2.schet += 1
+            player2.obshi_schet += 1
             text_render2 = font1.render('Счет:' + str(player2.schet), 1, (255, 255, 255))
+            text_render6 = font1.render('Общий счет:' + str(player2.obshi_schet), 1, (255, 255, 255))
             ball.rect.x = 350
             ball.rect.y = 250
         for m in sprite.spritecollide(ball, players, False):
@@ -120,6 +133,10 @@ while game == True:
             player1.schet = 0
             player2.schet = 0
             finish = False
+        if player1.obshi_schet >= 50:
+            player1.image2('красныйфоон.jpg')
+        if player2.obshi_schet >= 50:
+            player2.image2('fonsinii.png')
     else:
         konec += 1
         if konec == 100:
