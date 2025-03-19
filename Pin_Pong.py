@@ -30,6 +30,7 @@ class GameSprite(sprite.Sprite):
         self.rect.y = player_y
         self.schet = 0
         self.obshi_schet = 0
+        self.image_flag = True
     def clara(self, player_image2, player_width, player_height):
         self.image = transform.scale(image.load(player_image2), (player_width, player_height))
     def reset(self):
@@ -133,10 +134,12 @@ while game == True:
             player1.schet = 0
             player2.schet = 0
             finish = False
-        if player1.obshi_schet >= 50:
-            player1.image2('красныйфоон.jpg')
-        if player2.obshi_schet >= 50:
-            player2.image2('fonsinii.png')
+        if player1.obshi_schet >= 50 and player1.image_flag:
+            player1.clara('красныйфоон.jpg', 30, 85)
+            player1.image_flag = False
+        if player2.obshi_schet >= 50 and player2.image_flag:
+            player2.clara('fonsinii.png', 30, 85)
+            player2.image_flag = False
     else:
         konec += 1
         if konec == 100:
